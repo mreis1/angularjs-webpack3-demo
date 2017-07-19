@@ -7,7 +7,7 @@ body{
 }
 
 #img2{
-    background: url('./angular-black.png');
+    background: url('angular-black.png');
     height: 100px;
     width: 100px;
     background-size: cover;
