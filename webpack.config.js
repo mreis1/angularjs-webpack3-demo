@@ -1,6 +1,9 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 const webpack = require('webpack')
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const extractCSS = new ExtractTextPlugin('stylesheets/[name]-one.css');
+
 let webpackConfig = {
     entry: {
         app: './src/app.js',
@@ -10,7 +13,6 @@ let webpackConfig = {
         filename: '[name].[hash].js',
         path: path.resolve(__dirname, 'dist')
     },
-
     resolve: {
         extensions: ['.js']
     },
@@ -21,30 +23,21 @@ let webpackConfig = {
         new HtmlWebpackPlugin({
             title: 'Custom template using Handlebars',
             template: './src/index.html'
-        })
+        }),
+        new ExtractTextPlugin("styles.css")
     ],
     module: {
         rules: [
             {
-                test: /\.css$/,
-                use: [ 'style-loader', 'css-loader' ],
-                include: path.resolve(__dirname, './src')
-            },
-
-            // this is require to handle the bundle of files such as the png
-            {
                 test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)$/,
                 loader: 'file-loader?name=assets/[name].[hash].[ext]',
-                // or loader: 'file-loader',
                 query: {
                     useRelativePath: process.env.NODE_ENV === "production"
                 }
             },
-
             {
                 test: /\.css$/,
-                loader: 'raw-loader',
-                exclude: path.resolve(__dirname, './src')
+                use: extractCSS.extract([ 'style-loader', 'css-loader' ])
             },
             {
                 test: /\.html$/,

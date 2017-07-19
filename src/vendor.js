@@ -1,1 +1,1 @@
-require('webpack-material-design-icons');
+require('angular-material/angular-material.min.css');
